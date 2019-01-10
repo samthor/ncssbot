@@ -30,12 +30,16 @@ def alexa_necsus():
   data = request.get_json()
 
   request_type = data['request']['type']
+  try:
+    query = data['request']['intent']['slots']['query']['value']
+  except:
+    query = ''
+  print(f'got request_type={request_type}, query={query}')
 
   if request_type == 'LaunchRequest':
     return alexa_response('Welcome to NeCSuS, who would you like to kill?')
 
-  query = data['request']['intent']['slots']['query']['value']
-  if query == 'nicky' or query == 'nikki':
+  if 'nicky' in query or 'nikki' in query:
     return alexa_response('Nicky is literally unkillable', True)
   return alexa_response('You\'re Dead!', True)
 

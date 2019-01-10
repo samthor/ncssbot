@@ -34,14 +34,30 @@ def alexa_necsus():
     query = data['request']['intent']['slots']['query']['value']
   except:
     query = ''
-  print(f'got request_type={request_type}, query={query}')
 
-  if request_type == 'LaunchRequest':
-    return alexa_response('Welcome to NeCSuS, who would you like to kill?')
+  words = query.split()
+  noun = None
+  for word in words:
+    noun = word
+    if word[0].isupper():
+      break
 
-  if 'nicky' in query or 'nikki' in query:
-    return alexa_response('Nicky is literally unkillable', True)
-  return alexa_response('You\'re Dead!', True)
+  output = 'Welcome to NeCSuS, who would you like to kill?'
+  should_end_session = False
+
+  if noun:
+    noun = noun.lower()
+    if noun == 'stop':
+      should_end_session = True
+      output = 'Good night, children'
+    elif noun == 'nicky' or noun == 'nikki':
+      output = 'Nicky is literally unkillable'
+    elif noun == 'tim':
+      output = 'Tim stares deep into your soul and asks how your project is going'
+    else:
+      output = 'Psych, you\'re dead!'
+
+  return alexa_response(output, should_end_session)
 
 
 @app.route('/alexa', methods=['POST', 'GET'])

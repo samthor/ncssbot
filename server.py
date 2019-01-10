@@ -25,6 +25,21 @@ def alexa_response(text, shouldEndSession=False):
   })
 
 
+@app.route('/alexa_necsus', methods=['POST', 'GET'])
+def alexa_necsus():
+  data = request.get_json()
+
+  request_type = data['request']['type']
+
+  if request_type == 'LaunchRequest':
+    return alexa_response('Welcome to NeCSuS, who would you like to kill?')
+
+  query = data['request']['intent']['slots']['query']['value']
+  if query == 'nicky' or query == 'nikki':
+    return alexa_response('Nicky is literally unkillable', True)
+  return alexa_response('You\'re Dead!', True)
+
+
 @app.route('/alexa', methods=['POST', 'GET'])
 def alexa():
   data = request.get_json()
